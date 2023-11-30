@@ -6,11 +6,11 @@ clearvars; clc;
 disp('Load input args...');
 tic;
 
-input.dir = dir(fullfile(pwd, 'dataset_cipic\standard_hrir_database\'));
+input.dir = dir(fullfile('C:\Users\root\Documents\00phd\00ThirdPartyCode\ForSignalProcessing\SOFA API\SOFA API for Matlab and Octave 1.1.1\HRTFs\CIPIC_hrtf_database\standard_hrir_database\'));
 input.names = {input.dir(4:48).name}.';
-input.Fs = 44100;
+input.Fs = 44100; 
 input.N = 256;
-input.bases = [1,5,10,20,30,50,75,100,128];
+input.bases = [1,5,10,20,30,50,75,100,128]; % list for number of bases to be selected from
 
 varb.fnScale = -input.N/2 : input.N/2-1;
 varb.fScale = (input.Fs/input.N) * varb.fnScale;
@@ -19,7 +19,7 @@ toc;
 %% LOAD HRTF'S, CALCULATE GRAND MEAN
 disp('Load HRTFs...')
 tic;
-query = horzcat(linspace(0,0,5).', (0:45:180).');
+query = horzcat(linspace(0,0,5).', (0:45:180).');    % only for plotting!
 varb.azQuery = query(:,1);
 varb.elQuery = query(:,2);
 varb.sum = 0;
@@ -31,10 +31,10 @@ varb.subj2.handles(3).XLim = [3000,22050];
 for sub = 1:numel(input.names)
 %for sub = 1:3
     subj(sub) = hrtf_load(input.names{sub}, query, 0);
-    varb.sum = varb.sum + squeeze(sum(subj(sub).DTF_l, [1,2])) + squeeze(sum(subj(sub).DTF_r, [1,2]));
+    varb.sum = varb.sum + squeeze(sum(subj(sub).DTF_l, [1,2])) + squeeze(sum(subj(sub).DTF_r, [1,2])); % sum(subj(sub).DTF_l, [1,2]): sum over all directions
 end
 
-subj(1).grandMean = varb.sum ./ (2 * numel(subj(1).DTF_l(:,:,1)) * numel(subj));
+subj(1).grandMean = varb.sum ./ (2 * numel(subj(1).DTF_l(:,:,1)) * numel(subj)); % compute grand mean (over all directions and subjects)
 
 for sub = 1:numel(subj)
     subj(sub).DTF2_l = subj(sub).DTF_l ./ reshape(subj(1).grandMean, 1,1,numel(subj(1).grandMean));
@@ -47,7 +47,6 @@ toc;
 
 varb.fields = {'OnL','OnR','ITD','hrir_l','hrir_r'};
 subj = rmfield(subj, varb.fields);
-
 
 %% LOAD ANTHROPOMETRIC DATA
 %{

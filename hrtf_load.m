@@ -8,10 +8,9 @@ function subj = hrtf_load(in_subj, in_query, showFigure) % showFigure: 0=no figu
     showFigure = 1;
     %}
 
-
-    input.directory = fullfile(pwd, 'dataset_cipic\standard_hrir_database\');
+    input.directory = fullfile('C:\Users\root\Documents\00phd\00ThirdPartyCode\ForSignalProcessing\SOFA API\SOFA API for Matlab and Octave 1.1.1\HRTFs\CIPIC_hrtf_database\standard_hrir_database\');
     input.subject = in_subj;
-    input.query = in_query;
+    input.query = in_query;    % only for plotting
     input.N = 256;
     input.Fs = 44100;
     
@@ -73,10 +72,10 @@ function subj = hrtf_load(in_subj, in_query, showFigure) % showFigure: 0=no figu
 %         subj.meanHRTF(i) = (subj.meanHRTF_l(i)+subj.meanHRTF_r(i)) / 2; % in case u need it
     end
 
-%% PREP VARB
+%% PREP VARB (only for plotting)
     varb.xScale = 1:25;
     varb.yScale = 1:50;
-    varb.azScale = [-80, -65, -55, -45:5:45, 55, 65, 80];
+    varb.azScale = [-80, -65, -55, -45:5:45, 55, 65, 80];   % azimuth and elevation angles
     varb.elScale = -45 + 5.625*(0:49);
     varb.fnScale = -input.N/2 : input.N/2-1;
     varb.fScale = (input.Fs/input.N) * varb.fnScale;
